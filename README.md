@@ -2,7 +2,7 @@
  Summarizing a whole podcast form youtube and send it as a slack message to a channel using crewai and composio.
 
 
-# setup(without docker):-
+# setup:-
 
 ##### clone the repository
 ```bash
@@ -22,12 +22,4 @@ https://docs.composio.dev/apps/slack
 ##### Time to spin up the application
 ```bash
 streamlit run main.py
-```
-
-# setup(with docker):-
-
-```bash
-download docker and spin up the docker daemon
-docker build . -t <app_name>
-docker run -p 8501:8501 <app_ID>
 ```
