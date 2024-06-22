@@ -15,10 +15,7 @@ class PodSumCrew:
     audio_tool = [audio_transcriber_tool]
     slack_tool = composio_slack_tool()
     openai_api_key = os.environ.get("OPENAI_API_KEY")
-    if openai_api_key is not None:
-        llm_model = ChatOpenAI(model="gpt-4") 
-    else:
-        llm_model =  AzureChatOpenAI(openai_api_version=os.getenv("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
+    llm_model =  AzureChatOpenAI(openai_api_version=os.getenv("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
             azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt4chat"),
             azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT", "https://gpt-4-trails.openai.azure.com/"),
             api_key=os.getenv("AZURE_OPENAI_KEY"))
