@@ -3,14 +3,9 @@ from crewai.project import CrewBase, agent, crew, task
 from Tools.audio_trancriber import audio_transcriber_tool
 from Tools.composio_slack import composio_slack_tool
 import os
-from langchain_openai import AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from dotenv import load_dotenv
 load_dotenv()
-
-llm_model = AzureChatOpenAI(openai_api_version=os.getenv("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
-    azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt4chat"),
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT", "https://gpt-4-trails.openai.azure.com/"),
-    api_key=os.getenv("AZURE_OPENAI_KEY"))
 
 @CrewBase
 class PodSumCrew:
@@ -19,10 +14,14 @@ class PodSumCrew:
     tasks_config = 'config/tasks.yaml'
     audio_tool = [audio_transcriber_tool]
     slack_tool = composio_slack_tool()
-    llm_model = AzureChatOpenAI(openai_api_version=os.getenv("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
-        azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt4chat"),
-        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT", "https://gpt-4-trails.openai.azure.com/"),
-        api_key=os.getenv("AZURE_OPENAI_KEY"))
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+    if openai_api_key is not None:
+        llm_model = ChatOpenAI(model="gpt-4") 
+    else:
+        llm_model =  AzureChatOpenAI(openai_api_version=os.getenv("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
+            azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt4chat"),
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT", "https://gpt-4-trails.openai.azure.com/"),
+            api_key=os.getenv("AZURE_OPENAI_KEY"))
     
     @agent
     def summary_agent(self) -> Agent:
@@ -30,7 +29,7 @@ class PodSumCrew:
             config = self.agents_config['Transcriber_summarizer'],
             tools = self.audio_tool,
             verbose = True,
-            llm = llm_model,
+            llm = self.llm_model,
         )
     
     @agent
@@ -39,7 +38,7 @@ class PodSumCrew:
             config = self.agents_config['slack_messenger'],
             tools = self.slack_tool,
             verbose = True,
-            llm = llm_model,
+            llm = self.llm_model,
         )
     
     @task
