@@ -1,7 +1,7 @@
 from crewai_tools import tool
 from pytube import YouTube
 import whisper
-@tool("Audio Transribe tool")
+@tool("Audio Transribe tool and summary tool")
 def audio_transcriber_tool(url):
     """
     Extracts audio and transcribe the audio from a YouTube video given its URL.

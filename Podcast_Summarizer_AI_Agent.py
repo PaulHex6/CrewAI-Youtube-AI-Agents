@@ -12,7 +12,7 @@ class PodSumCrew:
     "Podcast summarizer and slack messenger Crew"
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
-    audio_tool = [audio_transcriber_tool]
+    audio_tool = []
     slack_tool = composio_slack_tool()
     openai_api_key = os.environ.get("OPENAI_API_KEY")
     llm_model =  AzureChatOpenAI(openai_api_version=os.getenv("AZURE_OPENAI_VERSION", "2023-07-01-preview"),
@@ -27,6 +27,7 @@ class PodSumCrew:
             tools = self.audio_tool,
             verbose = True,
             llm = self.llm_model,
+            allow_delegation = False,
         )
     
     @agent
