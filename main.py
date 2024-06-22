@@ -1,10 +1,23 @@
 from Podcast_Summarizer_AI_Agent import PodSumCrew
+import streamlit as st
+
+st.set_page_config(page_title="Podcast Summary App", layout="centered")
 
 def run():
-    youtube_url = input("Please enter a Youtube Podcast URL: "),
-    slack_channel = input("Please enter the name of the Slack channel where you would like the agent to send the message: "),
-    inputs = {"youtube_url": youtube_url, "slack_channel": slack_channel}
-    result = PodSumCrew().crew().kickoff(inputs=inputs)
+    st.title("Podcast Summary App")
 
-if __name__ == '__main__':
+    podcast_url = st.text_input("Enter the URL of the Podcast you want to summarize")
+    slack_channel = st.text_input("Enter the Slack channel name")
+
+    # Run the summarization code whenever podcast_url changes
+    if st.button("Summarize Podcast"):
+        if podcast_url and slack_channel:
+            inputs = {'youtube_url': podcast_url, "slack_channel": slack_channel}
+            result = PodSumCrew().crew().kickoff(inputs=inputs)
+            st.write(result)
+        else:
+            st.write("podcast_url or slack channel is empty")
+              # Clear result if podcast_url is empty
+
+if __name__ == "__main__":
     run()
