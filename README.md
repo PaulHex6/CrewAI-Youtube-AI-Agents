@@ -31,5 +31,3 @@ download docker and spin up the docker daemon
 docker build . -t <app_name>
 docker run -p 8501:8501 <app_ID>
 ```
-
-2) crewai :- https://www.crewai.com/
