@@ -14,7 +14,7 @@
 pip install -r requirements.txt
 ```
 
-##### connect composio with slack and create an app
+##### connecting composio with slack
 ```bash
 https://docs.composio.dev/apps/slack :- follow this documentation to connect slack and create an app.
 ```
