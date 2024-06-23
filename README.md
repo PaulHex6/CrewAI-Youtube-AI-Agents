@@ -2,10 +2,10 @@
 Summarizing a whole podcast form youtube and send it as a slack message to a channel using composio and crewai.
 Simply input the YouTube podcast URL and your preferred Slack channel—The Crew handles the rest, summarizing the content and delivering it seamlessly.
  ###### The below images is how the crew executes
-![alt text](https://file%2B.vscode-resource.vscode-cdn.net/Users/siddartha/Desktop/github/Podcast_summarizer_Agents/images/test_run.png?version%3D1719100736141)
+<img width="1509" alt="test_run" src="https://github.com/siddartha-10/Podcast_summarizer_Agents/assets/107453857/c73485cd-0360-4088-818a-176f9c4d84b8">
 
 ###### This is the slack that crew send
-![alt text](https://file%2B.vscode-resource.vscode-cdn.net/Users/siddartha/Desktop/github/Podcast_summarizer_Agents/images/Slack_message.png?version%3D1719100797641)
+<img width="1073" alt="Slack_message" src="https://github.com/siddartha-10/Podcast_summarizer_Agents/assets/107453857/3b1f9d09-5d6d-4e5a-8294-ad6d30a33bf7">
 
 ###### inputs for the above execution
 ```bash
