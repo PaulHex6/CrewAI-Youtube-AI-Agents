@@ -34,3 +34,6 @@ https://docs.composio.dev/apps/slack
 ```bash
 streamlit run main.py
 ```
+
+# Sample run Video
+
