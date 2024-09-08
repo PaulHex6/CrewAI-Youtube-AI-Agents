@@ -5,3 +5,4 @@ python-dotenv
 crewai-tools
 streamlit
 openai-whisper
+yt_dlp
