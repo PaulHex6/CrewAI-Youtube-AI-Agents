@@ -1,5 +1,5 @@
 .env
+venv
+temp
 __pycache__/
-*.pyc
-*.mp4
 *.mp3

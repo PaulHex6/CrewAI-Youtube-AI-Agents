@@ -1,11 +1,12 @@
+#tasks.yaml
 summarize_podcast_task:
   description: >
     Transcribe the podcast from the given URL and summarize the key points.
   expected_output: >
     A comprehensive and clear summary of the youtube podcast.
 
-send_message_to_slack_task:
+translate_summary_task:
   description: >
-    Send the summary to slack.
+    Translate the podcast summary into the target language.
   expected_output: >
-    A Confirmation that message has been sent to slack channel.
+    A translated version of the podcast summary in the target language.
