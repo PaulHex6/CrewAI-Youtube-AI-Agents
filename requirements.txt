@@ -1,4 +1,3 @@
-pysqlite3
 crewai==0.55.2
 composio-crewai==0.5.23
 langchain-openai==0.1.25
@@ -7,3 +6,7 @@ crewai-tools==0.12.0
 streamlit==1.38.0
 openai-whisper==20231117
 yt_dlp==2024.8.6
+pysqlite3
+pysqlite3-binary
+embedchain>=0.0.119
+chromadb>=0.3.22
