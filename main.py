@@ -249,7 +249,7 @@ def tooltip_html(text, tooltip_text):
 
 def run():
     # Load CSS page formatting and format page
-    st.set_page_config(page_title="Podcast Summary App", page_icon="▶️", layout="centered")
+    st.set_page_config(page_title="Video Fact Finder", page_icon="▶️", layout="centered")
     load_css('style.css')
     st.title("⏯️ Video Fact Finder")
 
@@ -270,7 +270,7 @@ def run():
     *Note:* This tool analyzes only speech, so all results are based on transcription, not video.
 
 
-    *Version 1.3.8*
+    *Version 1.3.9*
     """)
 
     # Check for API keys
