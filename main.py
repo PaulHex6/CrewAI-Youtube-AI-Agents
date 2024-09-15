@@ -12,6 +12,10 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain_community.chat_models import ChatPerplexity
 from pathlib import Path
 import time
+import pysqlite3
+import sys
+
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 load_dotenv()
 
