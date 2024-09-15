@@ -1,4 +1,4 @@
-# ▶️ Podcast Summarizer Agents
+# ▶️ Video Fact Finder
 
 This project analyzes a YouTube video podcast and provides a summarized version of the content. Simply input the YouTube URL, and the CrewAI agents handles the rest.
 
