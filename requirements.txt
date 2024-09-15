@@ -4,6 +4,6 @@ composio-crewai==0.5.23
 langchain-openai==0.1.25
 python-dotenv==1.0.1
 crewai-tools==0.12.0
-streamlit==1.50.0
+streamlit==1.38.0
 openai-whisper==20231117
 yt_dlp==2024.8.6
