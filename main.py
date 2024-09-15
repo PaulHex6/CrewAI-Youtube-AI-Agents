@@ -8,7 +8,8 @@ import whisper
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import tool
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatPerplexity
 from pathlib import Path
 
 load_dotenv()
@@ -85,12 +86,24 @@ class PodcastCrew:
             self.agents_config = yaml.safe_load(f)
         with open('config/tasks.yaml', 'r') as f:
             self.tasks_config = yaml.safe_load(f)
+
+        # Load audio transcriber tool
         self.audio_tool = [audio_transcriber_tool]
-        self.openai_api_key = os.environ.get("OPENAI_API_KEY")
-        self.llm_model = ChatOpenAI(
-            temperature=0,
+
+        # Configure GPT-3.5-turbo from OpenAI
+        self.openai_api_key = os.getenv("OPENAI_API_KEY")
+        self.gpt_llm = ChatOpenAI(
+            temperature=0.3,
             openai_api_key=self.openai_api_key,
-            model="gpt-3.5-turbo"  # Specify model
+            model="gpt-3.5-turbo"
+        )
+
+        # Configure Perplexity Llama-3.1-Sonar using Perplexity's API
+        self.perplexity_api_key = os.getenv("PPLX_API_KEY")
+        self.pplx_llm = ChatPerplexity(
+            model="llama-3.1-sonar-large-128k-online",
+            temperature=0.3,
+            pplx_api_key=self.perplexity_api_key
         )
 
     @agent
@@ -99,7 +112,7 @@ class PodcastCrew:
             config=self.agents_config['transcriber'],
             tools=self.audio_tool,  # Uses audio transcriber tool for converting podcast audio to text.
             verbose=True,
-            llm=self.llm_model,
+            llm=self.gpt_llm,
             allow_delegation=False,
         )
 
@@ -109,7 +122,7 @@ class PodcastCrew:
             config=self.agents_config['summarizer'],
             tools=[],  # No specific tools required, relies on LLM for summarization.
             verbose=True,
-            llm=self.llm_model,
+            llm=self.gpt_llm,
             allow_delegation=False,
         )
 
@@ -119,7 +132,7 @@ class PodcastCrew:
             config=self.agents_config['action_point_specialist'],
             tools=[],  # No specific tools required, relies on LLM for identifying actionable points.
             verbose=True,
-            llm=self.llm_model,
+            llm=self.gpt_llm,
             allow_delegation=False,
         )
 
@@ -129,7 +142,7 @@ class PodcastCrew:
             config=self.agents_config['product_analyst'],
             tools=[],  # No specific tools required, relies on LLM for identifying product mentions.
             verbose=True,
-            llm=self.llm_model,
+            llm=self.gpt_llm,
             allow_delegation=False,
         )
 
@@ -139,7 +152,7 @@ class PodcastCrew:
             config=self.agents_config['content_auditor'],
             tools=[],  # The captain may not use specific tools but oversees the crew.
             verbose=True,
-            llm=self.llm_model,
+            llm=self.gpt_llm,
             allow_delegation=False,  # The content auditor leads but does not delegate the final task review.
         )
 
@@ -218,7 +231,7 @@ def tooltip_html(text, tooltip_text):
 def run():
     #Load CSS page formatting and format page
     st.set_page_config(page_title="Podcast Summary App", layout="centered")
-    load_css('terminal.css')
+    load_css('style.css')
     st.title("Podcast Summary App")
 
     podcast_url = st.text_input("Enter the YouTube URL of the podcast you want to analyze")
