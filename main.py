@@ -270,10 +270,23 @@ def run():
     *Note:* This tool analyzes only speech, so all results are based on transcription, not video.
 
 
-    *Version 1.3.7*
+    *Version 1.3.8*
     """)
 
+    # Check for API keys
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    perplexity_api_key = os.getenv("PPLX_API_KEY")
 
+    # If API keys are missing, display input boxes in the sidebar to get them from the user
+    if not openai_api_key:
+        openai_api_key = st.sidebar.text_input("Enter OpenAI API Key", type="password")
+        if openai_api_key:
+            os.environ["OPENAI_API_KEY"] = openai_api_key  # Update environment variable for the session
+
+    if not perplexity_api_key:
+        perplexity_api_key = st.sidebar.text_input("Enter Perplexity API Key", type="password")
+        if perplexity_api_key:
+            os.environ["PPLX_API_KEY"] = perplexity_api_key  # Update environment variable for the session
 
     podcast_url = st.text_input("Enter the YouTube URL of the podcast you want to analyze")
 
