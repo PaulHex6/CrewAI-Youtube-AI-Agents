@@ -1,0 +1,120 @@
+/* 
+Oldschool terminal design with a full black background, green text, and terminal-inspired colors. 
+This stylesheet applies a retro, monochrome terminal look for buttons, inputs, and other elements.
+
+## Change these within the load_css('terminal.css') function.
+*/
+
+
+/* Apply terminal-like styling to the entire app */
+html, body, .stApp {
+  background-color: #000000 !important; /* Full black background */
+  color: #00ff00 !important; /* Green text for terminal look */
+  font-family: "Courier New", Courier, monospace !important; /* Terminal font */
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* Top bar */
+header, .css-1v3fvcr, .css-18ni7ap {
+  background-color: #000000 !important; /* Full black */
+  color: #00ff00 !important;
+  border-bottom: 2px solid #00ff00 !important; /* Green border below the header */
+}
+
+/* Customize headers */
+h1, h2, h3, h4, h5, h6 {
+  color: #00ff00 !important;
+  font-family: "Courier New", Courier, monospace !important;
+  margin: 0.5em 0;
+}
+
+/* Lighten text for instructions */
+label, .css-1d391kg p, .css-16huue1 p {
+  color: #a9f5a9 !important;  /* Lighter green for better contrast */
+}
+
+/* Customize text inputs */
+input, textarea {
+  border: 1px solid #00ff00 !important;
+  padding: 10px !important;
+  color: #00ff00 !important;
+  background-color: #000000 !important;
+  font-family: "Courier New", Courier, monospace !important;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* Button styling */
+button {
+  background-color: #000000 !important;
+  color: #00ff00 !important;
+  border: 1px solid #00ff00 !important;
+  padding: 10px 20px !important;
+  font-family: "Courier New", Courier, monospace !important;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #00ff00 !important;
+  color: #000000 !important;
+}
+
+/* Tooltip styling */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 300px;
+  background-color: #000000;
+  color: #00ff00;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 25px;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.5s;
+  border: 1px solid #00ff00;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Tooltip icon styling */
+.icon {
+  background-color: #000000;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* Add scroll bar styling for terminal look */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff00;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
+}

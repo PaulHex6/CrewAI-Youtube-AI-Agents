@@ -198,8 +198,9 @@ class PodcastCrew:
         )
 
 def load_css(file_name):
-    """Load external CSS from a file and inject it into the app."""
-    with open(file_name) as f:
+    """Load CSS from the static folder in your project directory."""
+    css_path = os.path.join(os.path.dirname(__file__), 'static', file_name)
+    with open(css_path) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 def tooltip_html(text, tooltip_text):
@@ -217,8 +218,8 @@ def tooltip_html(text, tooltip_text):
 def run():
     #Load CSS page formatting and format page
     st.set_page_config(page_title="Podcast Summary App", layout="centered")
+    load_css('terminal.css')
     st.title("Podcast Summary App")
-    load_css('style.css')
 
     podcast_url = st.text_input("Enter the YouTube URL of the podcast you want to analyze")
 

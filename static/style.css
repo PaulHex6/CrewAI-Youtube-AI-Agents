@@ -1,3 +1,11 @@
+/*
+Normal system template with standard colors and styling for modern web applications.
+This stylesheet uses light backgrounds, modern font styles, and standard button and input designs.
+
+## Change these within the load_css('style.css') function.
+*/
+
+
 .textbox-container {
     position: relative;
     width: 100%;
@@ -33,9 +41,9 @@
     opacity: 1;
   }
   
-  /* Apply font size to all child elements inside the tooltip */
+
   .tooltip .tooltiptext * {
-    font-size: 12px;  /* This ensures all elements, including paragraphs, inherit the same font size */
+    font-size: 12px; 
   }
   
   .icon {
