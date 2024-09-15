@@ -94,7 +94,7 @@ class PodcastCrew:
         # Configure model from OpenAI
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.gpt_llm = ChatOpenAI(
-            temperature=0.3,
+            temperature=0.2,
             openai_api_key=self.openai_api_key,
             model="gpt-4o-2024-08-06"               #for testing gpt-3.5-turbo, for production gpt-4o-2024-08-06
         )
@@ -102,8 +102,8 @@ class PodcastCrew:
         # Configure Perplexity Llama-3.1-Sonar using Perplexity's API
         self.perplexity_api_key = os.getenv("PPLX_API_KEY")
         self.pplx_llm = ChatPerplexity(
-            model="llama-3.1-sonar-large-128k-online",
-            temperature=0.3,
+            model="llama-3.1-sonar-huge-128k-online",
+            temperature=0,
             pplx_api_key=self.perplexity_api_key
         )
 
@@ -270,7 +270,7 @@ def run():
     *Note:* This tool analyzes only speech, so all results are based on transcription, not video.
 
 
-    *Version 1.3.5*
+    *Version 1.3.7*
     """)
 
 
