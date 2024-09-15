@@ -9,7 +9,7 @@ transcription_task:
 
 summary_task:
   description: >
-    Summarize the transcribed text to capture the main topics discussed in under 50 words.
+    Summarize the transcribed text to capture the main topics discussed in under 35 words.
   expected_output: >
     A concise summary of the key topics covered in the podcast.
 
@@ -19,27 +19,25 @@ actionable_insights_task:
   expected_output: >
     A list of actionable points or recommendations based on the podcast content.
 
-product_identification_task:
-  description: >
-    Analyze the podcast for any mentions of physical, tangible products across any context. Focus on items that are sold, manufactured, or used as specific, physical products. Avoid abstract concepts, conditions, or general terms unless they are part of a specific product, brand, or item that can be physically purchased or utilized.
-  expected_output: >
-    A comprehensive list of physical products mentioned in the podcast, including specific items like devices, packaged goods, tools, machinery, supplements, or consumer products. Exclude general concepts, conditions, or abstract terms unless they refer to a specific physical product.
-
 claims_identification_task:
   description: >
-    Review the transcript and extract the major claims or assertions made by the podcast participants.
+    Transcript and extract the 3-5 major claims or assertions made by the podcast participants, paying special attention to bold or exaggerated statements that could influence the audience or require further scrutiny.
   expected_output: >
-    A list of all major claims made during the podcast, organized clearly for further verification or analysis.
+    A clearly organized list of all major claims made during the podcast, with bold or exaggerated claims flagged for verification or further analysis.
+
 
 fact_checking_task:
   description: >
-    Verify the factual accuracy of the key points, actionable insights, and product mentions identified in the podcast. Ensure that all information is accurate, up-to-date, and properly referenced where necessary. For example, if a statement claims that a product boosts immunity, verify if there is scientific evidence supporting that claim.
+    Verify the factual accuracy of the key points and actionable insights identified in the podcast. Ensure that all information is accurate, up-to-date, properly referenced, and supported by credible sources. For example, if a statement claims that a product boosts immunity, verify if there is strong, peer-reviewed scientific evidence supporting that claim. Exaggerations and any claims that cannot be conclusively verified should be marked as uncertain.
   expected_output: >
-    A list of verified facts, each starting with one of these emoji's (IMPORTANT!): ✅ for true statements, ❌ for false statements, and ⚠️ for unverified or unclear information. Provide corrections for any inaccuracies and annotations for any unverified information. For example, "✅ True, regular exercise improves mental health," or "❌ False, consuming large amounts of sugar does not improve cognitive function."
+    A list of verified facts, each starting with one of these emoji's (IMPORTANT!):
+    ✅ for true statements (backed by credible and conclusive evidence),
+    ❌ for false statements (proven incorrect or misleading), and 
+    ⚠️ for unverified, exaggerated, or unclear information (claims with insufficient or conflicting evidence). 
 
 quality_audit_task:
   description: >
-    Conduct a final synthesis of all outputs and provide these in order: summary, action points, product mentions, fact checking results.
+    Conduct a final synthesis of all outputs and provide these in order: summary, action points, fact checking results.
   expected_output: >
     Provide the output in the following format:
     
@@ -50,10 +48,6 @@ quality_audit_task:
     # ✅ Actionable steps
 
     1. List of action items.
-
-    # 🛒 Product Mentions
-    
-    - List of physical products mentioned.
 
     # 🔍 Fact-Checking Results  - repeat all claims and mark each:
     

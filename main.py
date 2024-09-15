@@ -96,7 +96,7 @@ class PodcastCrew:
         self.gpt_llm = ChatOpenAI(
             temperature=0.3,
             openai_api_key=self.openai_api_key,
-            model="gpt-3.5-turbo"               #for testing gpt-3.5-turbo, for production gpt-4o
+            model="gpt-4o-2024-08-06"               #for testing gpt-3.5-turbo, for production gpt-4o-2024-08-06
         )
 
         # Configure Perplexity Llama-3.1-Sonar using Perplexity's API
@@ -132,16 +132,6 @@ class PodcastCrew:
         return Agent(
             config=self.agents_config['action_point_specialist'],
             tools=[],  # No specific tools required, relies on LLM for identifying actionable points.
-            verbose=True,
-            llm=self.gpt_llm,
-            allow_delegation=False,
-        )
-
-    @agent
-    def product_analyst(self) -> Agent:
-        return Agent(
-            config=self.agents_config['product_analyst'],
-            tools=[],  # No specific tools required, relies on LLM for identifying product mentions.
             verbose=True,
             llm=self.gpt_llm,
             allow_delegation=False,
@@ -202,14 +192,6 @@ class PodcastCrew:
         )
 
     @task
-    def product_identification_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['product_identification_task'],
-            tools=[],  # No specific tools needed.
-            agent=self.product_analyst(),
-        )
-
-    @task
     def claims_identification_task(self) -> Task:
         return Task(
             config=self.tasks_config['claims_identification_task'],
@@ -234,7 +216,6 @@ class PodcastCrew:
             context=[self.transcription_task(), 
                  self.summary_task(), 
                  self.actionable_insights_task(), 
-                 self.product_identification_task(),
                  self.fact_checking_task()],
             agent=self.content_auditor(),
         )
@@ -283,17 +264,21 @@ def run():
     - Summarize key points from YouTube videos.
     - Identify actionable insights and takeaways.
     - Fact-check claims made in the video for accuracy.
-        
+
     Analyze your video content efficiently using AI-powered tools.
-    
-    *Version 1.3.3*                        
+
+    *Note:* This tool analyzes only speech, so all results are based on transcription, not video.
+
+
+    *Version 1.3.5*
     """)
+
 
 
     podcast_url = st.text_input("Enter the YouTube URL of the podcast you want to analyze")
 
     # Add Video Preview
-    if podcast_url:
+    if podcast_url and "shorts" not in podcast_url:
         try:
             st.video(podcast_url)
         except Exception:
