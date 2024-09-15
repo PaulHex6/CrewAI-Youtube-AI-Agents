@@ -118,3 +118,10 @@ button:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: #00cc00;
 }
+
+iframe {
+  width: 50% !important; /* Adjust the width to 50% */
+  height: auto !important; /* Automatically adjust the height */
+  max-width: 100%; /* Ensure it doesn’t exceed the screen size */
+}
+

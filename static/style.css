@@ -60,3 +60,9 @@ This stylesheet uses light backgrounds, modern font styles, and standard button 
     font-weight: bold;
   }
   
+  /* CSS to resize video in Streamlit */
+iframe {
+  width: 50% !important; /* Adjust the width to 50% */
+  height: auto !important; /* Automatically adjust the height */
+  max-width: 100%; /* Ensure it doesn’t exceed the screen size */
+}

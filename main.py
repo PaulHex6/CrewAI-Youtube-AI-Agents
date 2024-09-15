@@ -11,6 +11,7 @@ from crewai_tools import tool
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.chat_models import ChatPerplexity
 from pathlib import Path
+import time
 
 load_dotenv()
 
@@ -90,12 +91,12 @@ class PodcastCrew:
         # Load audio transcriber tool
         self.audio_tool = [audio_transcriber_tool]
 
-        # Configure GPT-3.5-turbo from OpenAI
+        # Configure model from OpenAI
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.gpt_llm = ChatOpenAI(
             temperature=0.3,
             openai_api_key=self.openai_api_key,
-            model="gpt-3.5-turbo"
+            model="gpt-3.5-turbo"               #for testing gpt-3.5-turbo, for production gpt-4o
         )
 
         # Configure Perplexity Llama-3.1-Sonar using Perplexity's API
@@ -156,6 +157,26 @@ class PodcastCrew:
             allow_delegation=False,  # The content auditor leads but does not delegate the final task review.
         )
 
+    @agent
+    def claims_analyst(self) -> Agent:
+        return Agent(
+            config=self.agents_config['claims_analyst'],
+            tools=[],  # No tools being used
+            verbose=True,
+            llm=self.gpt_llm,  # Using the LLM model
+            allow_delegation=False,
+        )
+
+    @agent
+    def fact_checker(self) -> Agent:
+        return Agent(
+            config=self.agents_config['fact_checker'],
+            tools=[],  # No tools being used
+            verbose=True,
+            llm=self.pplx_llm,  # Using Perplexity with online access
+            allow_delegation=False,
+        )
+
     @task
     def transcription_task(self) -> Task:
         return Task(
@@ -189,6 +210,23 @@ class PodcastCrew:
         )
 
     @task
+    def claims_identification_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['claims_identification_task'],
+            tools=[],  # No tools being used
+            agent=self.claims_analyst(),  # Using the claims_analyst agent
+        )
+
+    @task
+    def fact_checking_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['fact_checking_task'],
+            tools=[],  # No tools being used
+            context=[self.claims_identification_task()],
+            agent=self.fact_checker(),  # Using the fact_checker agent
+        )
+
+    @task
     def quality_audit_task(self) -> Task:
         return Task(
             config=self.tasks_config['quality_audit_task'],
@@ -196,10 +234,10 @@ class PodcastCrew:
             context=[self.transcription_task(), 
                  self.summary_task(), 
                  self.actionable_insights_task(), 
-                 self.product_identification_task()],
+                 self.product_identification_task(),
+                 self.fact_checking_task()],
             agent=self.content_auditor(),
         )
-
 
     @crew
     def crew(self) -> Crew:
@@ -229,33 +267,61 @@ def tooltip_html(text, tooltip_text):
 
 
 def run():
-    #Load CSS page formatting and format page
-    st.set_page_config(page_title="Podcast Summary App", layout="centered")
+    # Load CSS page formatting and format page
+    st.set_page_config(page_title="Podcast Summary App", page_icon="▶️", layout="centered")
     load_css('style.css')
-    st.title("Podcast Summary App")
+    st.title("⏯️ Video Fact Finder")
+
+    # Sidebar for options and static text
+    st.sidebar.title("How it Works")
+    
+    # Add static text for app introduction
+    st.sidebar.markdown("""
+        
+    Welcome to ⏯️ **Video Fact Finder**, a tool designed to help you:
+        
+    - Summarize key points from YouTube videos.
+    - Identify actionable insights and takeaways.
+    - Fact-check claims made in the video for accuracy.
+        
+    Analyze your video content efficiently using AI-powered tools.
+    
+    *Version 1.3.3*                        
+    """)
+
 
     podcast_url = st.text_input("Enter the YouTube URL of the podcast you want to analyze")
 
+    # Add Video Preview
+    if podcast_url:
+        try:
+            st.video(podcast_url)
+        except Exception:
+            pass  # Ignore any exception and don't display anything
+
     if st.button("Process Podcast"):
         if podcast_url:
-            #st.info("Analysis in progress. This may take a couple of minutes, please wait...")
+            start_time = time.time()
 
             # Add a waiting spinner while the analysis process runs
             with st.spinner('Processing the podcast... this may take a few minutes.'):
                 inputs = {'youtube_url': podcast_url}
                 result = PodcastCrew().crew().kickoff(inputs=inputs)
 
+            # Calculate elapsed time
+            elapsed_time = time.time() - start_time
+
             # Directly access the attributes of the result object
             raw_transcription = result.raw if hasattr(result, "raw") else "Transcription not available"
             token_usage = result.token_usage if hasattr(result, "token_usage") else None
 
-            # Display the raw transcription in a text box
-            st.text_area("Output:", value=raw_transcription, height=300)
+            # Display the raw transcription with formatting and icons
+            st.write(raw_transcription)
 
             # Display the token usage
             if token_usage:
                 token_info = (
-                    f"Token Usage:\n"
+                    f"**Token Usage:**\n\n"
                     f"Total Tokens: {token_usage.total_tokens}\n"
                     f"Prompt Tokens: {token_usage.prompt_tokens}\n"
                     f"Completion Tokens: {token_usage.completion_tokens}\n"
@@ -264,8 +330,10 @@ def run():
             else:
                 token_info = "Token usage not available."
 
-            # Add tooltip below the transcription text area with token usage
-            st.markdown(tooltip_html("i", f"Summary:\n\n\n{token_info}"), unsafe_allow_html=True)
+            # Display the token info with a tooltip and the elapsed time
+            st.markdown(tooltip_html("i", f"Summary:\n\n\n{token_info}\n\n"
+                                        f"**Elapsed Time:** {elapsed_time:.2f} seconds"), 
+                        unsafe_allow_html=True)
 
         else:
             st.write("Podcast URL is empty")

@@ -21,12 +21,44 @@ actionable_insights_task:
 
 product_identification_task:
   description: >
-    Analyze the podcast for any mentions of physical products, and create a list of identified items.
+    Analyze the podcast for any mentions of physical, tangible products across any context. Focus on items that are sold, manufactured, or used as specific, physical products. Avoid abstract concepts, conditions, or general terms unless they are part of a specific product, brand, or item that can be physically purchased or utilized.
   expected_output: >
-    A comprehensive list of all physical products mentioned in the podcast.
+    A comprehensive list of physical products mentioned in the podcast, including specific items like devices, packaged goods, tools, machinery, supplements, or consumer products. Exclude general concepts, conditions, or abstract terms unless they refer to a specific physical product.
+
+claims_identification_task:
+  description: >
+    Review the transcript and extract the major claims or assertions made by the podcast participants.
+  expected_output: >
+    A list of all major claims made during the podcast, organized clearly for further verification or analysis.
+
+fact_checking_task:
+  description: >
+    Verify the factual accuracy of the key points, actionable insights, and product mentions identified in the podcast. Ensure that all information is accurate, up-to-date, and properly referenced where necessary. For example, if a statement claims that a product boosts immunity, verify if there is scientific evidence supporting that claim.
+  expected_output: >
+    A list of verified facts, each starting with one of these emoji's (IMPORTANT!): ✅ for true statements, ❌ for false statements, and ⚠️ for unverified or unclear information. Provide corrections for any inaccuracies and annotations for any unverified information. For example, "✅ True, regular exercise improves mental health," or "❌ False, consuming large amounts of sugar does not improve cognitive function."
 
 quality_audit_task:
   description: >
-    Conduct a final synthesis of all outputs and provide these in order: summary, action points, product mentions, full transcription. 
+    Conduct a final synthesis of all outputs and provide these in order: summary, action points, product mentions, fact checking results.
   expected_output: >
-    Show output in clear structured manner with clear titles. Keep inputs unchanged in original format.
+    Provide the output in the following format:
+    
+    # 📄 Summary
+    
+    [summary]
+
+    # ✅ Actionable steps
+
+    1. List of action items.
+
+    # 🛒 Product Mentions
+    
+    - List of physical products mentioned.
+
+    # 🔍 Fact-Checking Results  - repeat all claims and mark each:
+    
+    - ✅ True, ...
+    - ❌ False, ...  
+    - ⚠️ Uncertain, ...
+    
+    Ensure the original format of inputs is preserved where necessary, while clearly structuring the final output.
