@@ -2,3 +2,4 @@ libffi-dev
 gcc
 build-essential
 python3-dev
+libsqlite3-dev

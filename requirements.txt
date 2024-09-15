@@ -1,3 +1,4 @@
+pysqlite3
 crewai==0.55.2
 composio-crewai==0.5.23
 langchain-openai==0.1.25
