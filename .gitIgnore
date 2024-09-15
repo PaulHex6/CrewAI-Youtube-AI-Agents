@@ -1,5 +1,5 @@
 .env
-venv
-temp
+venv/
+temp/
 __pycache__/
 *.mp3

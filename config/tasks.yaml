@@ -1,12 +1,32 @@
 #tasks.yaml
-summarize_podcast_task:
-  description: >
-    Transcribe the podcast from the given URL and summarize the key points.
-  expected_output: >
-    A comprehensive and clear summary of the youtube podcast.
+# Configuration file for tasks in CrewAI, specifying task descriptions, agents, tools, and arguments required for each task execution.
 
-translate_summary_task:
+transcription_task:
   description: >
-    Translate the podcast summary into the target language.
+    Transcribe the podcast audio from {youtube_url} into text to provide a base for further analysis.
   expected_output: >
-    A translated version of the podcast summary in the target language.
+    A full and accurate text transcription of the podcast.
+
+summary_task:
+  description: >
+    Summarize the transcribed text to capture the main topics discussed in under 50 words.
+  expected_output: >
+    A concise summary of the key topics covered in the podcast.
+
+actionable_insights_task:
+  description: >
+    Review the transcript and identify key actionable points or takeaways for the audience.
+  expected_output: >
+    A list of actionable points or recommendations based on the podcast content.
+
+product_identification_task:
+  description: >
+    Analyze the podcast for any mentions of physical products, and create a list of identified items.
+  expected_output: >
+    A comprehensive list of all physical products mentioned in the podcast.
+
+quality_audit_task:
+  description: >
+    Conduct a final synthesis of all outputs and provide these in order: summary, action points, product mentions, full transcription. 
+  expected_output: >
+    Show output in clear structured manner with clear titles. Keep inputs unchanged in original format.

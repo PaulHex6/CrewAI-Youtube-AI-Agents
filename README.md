@@ -1,7 +1,10 @@
-
 # Podcast_summarizer_Agents
 
-This project summarizes a whole podcast from YouTube. Simply input the YouTube podcast URL, and the Crew handles the rest, summarizing the content seamlessly.
+This project analyzes a YouTube video podcast and provides a summarized version of the content. Simply input the YouTube URL, and the CrewAI agents handles the rest.
+
+#### Setup
+
+Before running the application, add your API keys in a `.env` file.
 
 #### Install the packages:
 ```bash

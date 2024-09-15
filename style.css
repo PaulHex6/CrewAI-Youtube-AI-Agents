@@ -1,0 +1,54 @@
+.textbox-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  .tooltip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: gray;
+    color: #ffffff;
+    font-size: 12px;  /* Set a base font size for all elements */
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: 25px;  /* Show below the icon */
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Apply font size to all child elements inside the tooltip */
+  .tooltip .tooltiptext * {
+    font-size: 12px;  /* This ensures all elements, including paragraphs, inherit the same font size */
+  }
+  
+  .icon {
+    background-color: white;
+    color: gray;
+    border: 1px solid gray;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
