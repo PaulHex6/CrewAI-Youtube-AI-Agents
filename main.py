@@ -5,17 +5,17 @@ import yaml
 from dotenv import load_dotenv
 import yt_dlp
 import whisper
+import time
+import json
+from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled, VideoUnavailable
+import urllib.parse
+
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import tool
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.chat_models import ChatPerplexity
-from pathlib import Path
-import time
-import pysqlite3
-import sys
-
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+#from pathlib import Path
 
 load_dotenv()
 
@@ -23,23 +23,61 @@ load_dotenv()
 def audio_transcriber_tool(input_str: str) -> str:
     """
     Extracts audio and transcribes the audio from a YouTube video given its URL.
+    If subtitles are available from YouTube, it fetches them; otherwise, it uses Whisper to transcribe the audio.
 
     Parameters:
     - input_str (str): A JSON string containing the URL of the YouTube video.
 
     Returns:
-    str: The transcribed text from the YouTube audio.
+    str: The transcribed text from the YouTube audio or subtitles.
     """
-    import json
+
+    def extract_video_id(url):
+        parsed_url = urllib.parse.urlparse(url)
+        hostname = parsed_url.hostname.lower() if parsed_url.hostname else ''
+        if 'youtu.be' in hostname:
+            return parsed_url.path[1:]
+        elif 'youtube.com' in hostname:
+            if parsed_url.path == '/watch':
+                query = urllib.parse.parse_qs(parsed_url.query)
+                return query.get('v', [None])[0]
+            elif parsed_url.path.startswith(('/embed/', '/v/')):
+                return parsed_url.path.split('/')[2]
+        return None
+
+    def get_youtube_transcription(url: str) -> str:
+        video_id = extract_video_id(url)
+        if not video_id:
+            return None
+
+        try:
+            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+            for transcript in transcript_list:
+                if not transcript.is_generated:
+                    try:
+                        transcript_data = transcript.fetch()
+                        return ' '.join([t['text'] for t in transcript_data])
+                    except Exception:
+                        continue
+
+            for transcript in transcript_list:
+                if transcript.is_generated:
+                    try:
+                        transcript_data = transcript.fetch()
+                        return ' '.join([t['text'] for t in transcript_data])
+                    except Exception:
+                        continue
+            return None
+        except (NoTranscriptFound, TranscriptsDisabled, VideoUnavailable):
+            return None
+
     try:
-        # Parse the input string
         if input_str.strip().startswith('{'):
             inputs = json.loads(input_str)
             url = inputs.get('url') or inputs.get('input_str') or inputs.get('youtube_url')
             if url is None:
                 raise ValueError("URL is required in the input JSON.")
         else:
-            # Input is a plain URL
             url = input_str.strip()
             if not url:
                 raise ValueError("Input URL is empty.")
@@ -48,38 +86,36 @@ def audio_transcriber_tool(input_str: str) -> str:
     except Exception as e:
         return f"Error processing input: {e}"
 
-    # Proceed with downloading and transcription
     try:
-        # Use yt-dlp to download the audio from the YouTube video
+        # Step 1: Try to fetch subtitles from YouTube
+        youtube_transcription = get_youtube_transcription(url)
+        if youtube_transcription:
+            return youtube_transcription
+
+        # Step 2: If no subtitles, proceed with Whisper transcription
         ydl_opts = {
-            'format': 'bestaudio/best',  # Download the best available audio
+            'format': 'bestaudio/best',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',  # Extract as mp3
-                'preferredquality': '192',  # Audio quality
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
             }],
-            'outtmpl': 'audio_file.%(ext)s',  # Output filename with extension
-            'quiet': True,  # Suppress console output
+            'outtmpl': 'audio_file.%(ext)s',
+            'quiet': True,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])  # Download the audio from the URL
+            ydl.download([url])
 
-        # Find the downloaded audio file (assuming mp3 extension)
         audio_file = "audio_file.mp3"
-
-        # Load the Whisper model
         whisper_model = whisper.load_model("small")
-
-        # Transcribe the downloaded audio file
         result = whisper_model.transcribe(audio_file)
 
-        # Clean up the audio file after transcription
         os.remove(audio_file)
-
         return result["text"]
     except Exception as e:
         return f"Error downloading or transcribing audio: {e}"
+
 
 @CrewBase
 class PodcastCrew:
@@ -274,7 +310,7 @@ def run():
     *Note:* This tool analyzes only speech, so all results are based on transcription, not video.
 
 
-    *Version 1.3.9*
+    *Version 1.4.0*
     """)
 
     # Check for API keys

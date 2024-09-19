@@ -28,7 +28,7 @@ claims_identification_task:
 
 fact_checking_task:
   description: >
-    Verify the accuracy of key points from the podcast, using credible and up-to-date sources. Evaluate claims from any domain (e.g., health, technology, history) based on peer-reviewed studies, reputable news, or authoritative data. Mark claims as uncertain if they are exaggerated or lack solid evidence.
+    Verify the accuracy of key points from the podcast, using credible and up-to-date sources. Evaluate claims from any domain (e.g., health, technology, history) based on peer-reviewed studies, reputable news, or authoritative data. Mark claims as uncertain if they are exaggerated or lack solid evidence. Max 10 words per point.
   expected_output: >
     A list of verified facts, each starting with one of these emoji's (IMPORTANT!):
     ✅ for true statements (backed by solid evidence),
